@@ -23,7 +23,8 @@ class AddDataScreenVM extends BaseController {
       onPressed: () {
         Map<String, dynamic> result = {
           'name': nameController.value.text,
-          'lastName': lastnameController.value.text
+          'lastName': lastnameController.value.text,
+          'province': provinceController.value.text
         };
 
         Get.back(result: result);

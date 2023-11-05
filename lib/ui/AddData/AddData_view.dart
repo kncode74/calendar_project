@@ -39,6 +39,10 @@ class AddDataView extends BaseView<AddDataScreenVM> {
                     return null;
                   },
                 ),
+                TextFormField(
+                  controller: controller.provinceController.value,
+                  decoration: InputDecoration(labelText: 'province'),
+                ),
                 controller.saveData()
               ],
             ),

@@ -13,16 +13,21 @@ class HompageScreenBinding extends Bindings {
 class User {
   final String name;
   final String lastName;
-  User(this.name, this.lastName);
+  final String province;
+  User(this.name, this.lastName, this.province);
 }
 
 class HomepageScreenController extends BaseController {
   final RxList<User> userList = <User>[].obs;
-
+  //สร้าง set เก็บข้อมูล จังหวัดที่ไม่แสดงไม่ซ้ำกัน
+  final RxSet<String> province = <String>{}.obs;
+//เพิ่มข้อมูล Map ใส่ไว้ในลิสต์
   addUser(Map<String, dynamic> user) {
     userList.add(
-      User(user['name'], user['lastName']),
+      User(user['name'], user['lastName'], user['province']),
     );
+    province.add(user['province']);
+    // ignore: avoid_print
     print(userList.value);
   }
 

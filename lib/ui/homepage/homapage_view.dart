@@ -78,6 +78,9 @@ class HompageView extends BaseView<HomepageScreenController> {
                 ),
                 Row(
                   children: [Text(controller.userList[indexList].lastName)],
+                ),
+                Row(
+                  children: [Text(controller.userList[indexList].province)],
                 )
               ],
             ),
@@ -86,11 +89,14 @@ class HompageView extends BaseView<HomepageScreenController> {
   }
 
   Widget secound() {
-    return const Scaffold(
-      body: Center(
-        child: Text('data'),
-      ),
-    );
+    return Obx(() => Scaffold(
+          body: ListView.builder(
+            itemCount: controller.province.length,
+            itemBuilder: (context, index) {
+              return ListTile(title: Text(controller.province.toList()[index]));
+            },
+          ),
+        ));
   }
 
   Widget clickCreate() {
