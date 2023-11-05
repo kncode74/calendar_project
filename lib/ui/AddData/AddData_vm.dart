@@ -11,15 +11,11 @@ class AddDataScreenBinding extends Bindings {
   }
 }
 
-class AssignData {
-  String name = '';
-  String lastname = '';
-}
-
 class AddDataScreenVM extends BaseController {
-  AssignData data = AssignData();
   final Rx<TextEditingController> nameController = TextEditingController().obs;
   final Rx<TextEditingController> lastnameController =
+      TextEditingController().obs;
+  final Rx<TextEditingController> provinceController =
       TextEditingController().obs;
 
   Widget saveData() {
@@ -30,9 +26,6 @@ class AddDataScreenVM extends BaseController {
           'lastName': lastnameController.value.text
         };
 
-        // Get.back(result: {
-        //   //dt = [data.name = nameController.value.text, data.lastname = lastnameController.value.text],
-        // });
         Get.back(result: result);
       },
       child: const Text('save'),

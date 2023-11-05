@@ -50,16 +50,43 @@ class HompageView extends BaseView<HomepageScreenController> {
         body: Obx(() => ListView.builder(
             itemCount: controller.userList.length,
             itemBuilder: ((context, index) {
-              return ListTile(
-                  title: Text(
-                    controller.userList[index].name,
-                  ),
-                  subtitle: Text(controller.userList[index].lastName));
+              return InkWell(
+                onTap: () => Get.to(detail(index)),
+                child: ListTile(
+                    title: Text(
+                      controller.userList[index].name,
+                    ),
+                    subtitle: Text(controller.userList[index].lastName),
+                    trailing: InkWell(
+                      onTap: () => controller.delete(index),
+                      child: const Icon(Icons.delete),
+                    )),
+              );
             }))));
   }
 
+  Widget detail(int indexList) {
+    return Obx(() => Scaffold(
+          appBar: AppBar(),
+          body: Center(
+            child: Column(
+              children: [
+                Row(
+                  children: [
+                    Text(controller.userList[indexList].name),
+                  ],
+                ),
+                Row(
+                  children: [Text(controller.userList[indexList].lastName)],
+                )
+              ],
+            ),
+          ),
+        ));
+  }
+
   Widget secound() {
-    return Scaffold(
+    return const Scaffold(
       body: Center(
         child: Text('data'),
       ),
@@ -73,6 +100,7 @@ class HompageView extends BaseView<HomepageScreenController> {
           () => AddDataView(),
         );
         controller.addUser(result);
+        // ignore: avoid_print
         print('result $result');
       }),
       child: const Icon(Icons.add),
