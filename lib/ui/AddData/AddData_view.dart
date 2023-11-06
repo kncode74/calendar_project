@@ -1,11 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
 import 'package:getx_mvvm_boilerplate/application/base/base_view.dart';
 import 'package:getx_mvvm_boilerplate/ui/AddData/AddData_vm.dart';
 
 class AddDataView extends BaseView<AddDataScreenVM> {
   final formKey = GlobalKey<FormState>();
-  final loginVM = Get.put(AddDataScreenVM());
 
   @override
   Widget render(BuildContext context) {
@@ -20,7 +18,7 @@ class AddDataView extends BaseView<AddDataScreenVM> {
             child: Column(
               children: [
                 TextFormField(
-                  controller: loginVM.nameController.value,
+                  controller: controller.nameController.value,
                   decoration: const InputDecoration(labelText: 'Name'),
                   validator: (value) {
                     if (value == null || value.isEmpty) {
@@ -30,7 +28,7 @@ class AddDataView extends BaseView<AddDataScreenVM> {
                   },
                 ),
                 TextFormField(
-                  controller: loginVM.lastnameController.value,
+                  controller: controller.lastnameController.value,
                   decoration: const InputDecoration(labelText: 'lastName'),
                   validator: (value) {
                     if (value == null || value.isEmpty) {
@@ -41,7 +39,7 @@ class AddDataView extends BaseView<AddDataScreenVM> {
                 ),
                 TextFormField(
                   controller: controller.provinceController.value,
-                  decoration: InputDecoration(labelText: 'province'),
+                  decoration: const InputDecoration(labelText: 'province'),
                 ),
                 controller.saveData()
               ],
