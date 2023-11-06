@@ -150,7 +150,10 @@ class HompageView extends BaseView<HomepageScreenController> {
             child: const Text('Cancel'),
           ),
           TextButton(
-            onPressed: () => controller.delete(index),
+            onPressed: () {
+              Get.back();
+              controller.delete(index);
+            },
             child: const Text('OK'),
           ),
         ],

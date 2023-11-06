@@ -1,3 +1,5 @@
+import 'dart:ffi';
+
 import 'package:get/get.dart';
 import 'package:getx_mvvm_boilerplate/application/base/base_controller.dart';
 
@@ -14,7 +16,8 @@ class User {
   final String name;
   final String lastName;
   final String province;
-  User(this.name, this.lastName, this.province);
+  List<Int> phoneNumber;
+  User(this.name, this.lastName, this.province, this.phoneNumber);
 }
 
 class HomepageScreenController extends BaseController {
@@ -28,24 +31,16 @@ class HomepageScreenController extends BaseController {
 //เพิ่มข้อมูล Map ใส่ไว้ในลิสต์
   addUser(Map<String, dynamic> user) {
     userList.add(
-      User(user['name'], user['lastName'], user['province']),
+      User(user['name'], user['lastName'], user['province'],
+          user['phoneNumber']),
     );
     province.add(user['province']);
-    // ignore: avoid_print
-    print(userList.value);
   }
-
-  // whereUser(List<User> userlist, int index) {
-  //   usersInProvince = userList
-  //       .where((user) => user.province == province.toList()[index])
-  //       .toList();
-  // }
 
 //สร้างปุ่มลบข้อมูล
 //โดยรับค่า index
 //.removeAt
   delete(int index) async {
     userList.removeAt(index);
-    Get.back();
   }
 }

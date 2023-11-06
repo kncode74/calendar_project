@@ -18,18 +18,13 @@ class AddDataScreenVM extends BaseController {
   final Rx<TextEditingController> provinceController =
       TextEditingController().obs;
 
-  Widget saveData() {
-    return ElevatedButton(
-      onPressed: () {
-        Map<String, dynamic> result = {
-          'name': nameController.value.text,
-          'lastName': lastnameController.value.text,
-          'province': provinceController.value.text
-        };
+  saveData() {
+    Map<String, dynamic> result = {
+      'name': nameController.value.text,
+      'lastName': lastnameController.value.text,
+      'province': provinceController.value.text
+    };
 
-        Get.back(result: result);
-      },
-      child: const Text('save'),
-    );
+    Get.back(result: result);
   }
 }

@@ -20,7 +20,7 @@ class DetailprovinceView extends BaseView<DetailProvinceViewModel> {
             final user = usersInProvince[index];
             return InkWell(
               onTap: () {
-                Get.to(Inprovince(), arguments: {'user': user});
+                Get.to(const Inprovince(), arguments: {'user': user});
               },
               child: ListTile(
                 title: Text(
