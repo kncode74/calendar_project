@@ -9,9 +9,15 @@ abstract class BaseView<Controller extends BaseController>
     extends GetView<Controller> implements LifeCycleListener{
 
   Widget render(BuildContext context);
-
+bool isInitial = false;
   @override
   Widget build(BuildContext context) {
+    Future.delayed(const Duration(seconds: 0), () {
+      if (!isInitial) {
+        onInit();
+        isInitial = true;
+      }
+    });
     return render(context);
   }
 

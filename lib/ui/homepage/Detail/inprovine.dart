@@ -11,7 +11,12 @@ class Inprovince extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(),
       body: Center(
-        child: Text(received.name),
+        child: Row(
+          children: [
+            Text(received.name),
+            Text(received.phoneNumbers.toString())
+          ],
+        ),
       ),
     );
   }

@@ -3,7 +3,8 @@ import 'package:get/get.dart';
 import 'package:getx_mvvm_boilerplate/application/base/base_view.dart';
 import 'package:getx_mvvm_boilerplate/ui/AddData/AddData_view.dart';
 import 'package:getx_mvvm_boilerplate/ui/AddData/AddData_vm.dart';
-import 'package:getx_mvvm_boilerplate/ui/homepage/Detail/detailUser_view.dart';
+import 'package:getx_mvvm_boilerplate/ui/homepage/Detail/detail_User/detailUser_view.dart';
+import 'package:getx_mvvm_boilerplate/ui/homepage/Detail/detail_User/detailUser_vm.dart';
 import 'package:getx_mvvm_boilerplate/ui/homepage/Detail/detail_province/detailProvince_view.dart';
 import 'package:getx_mvvm_boilerplate/ui/homepage/Detail/detail_province/detailProvince_vm.dart';
 import 'package:getx_mvvm_boilerplate/ui/homepage/homepage_vm.dart';
@@ -50,27 +51,54 @@ class HompageView extends BaseView<HomepageScreenController> {
   }
 
   Widget first() {
+    controller.showData(controller.userList);
+
     return Scaffold(
         body: Obx(() => ListView.builder(
             itemCount: controller.userList.length,
             itemBuilder: ((context, index) {
               User user = controller.userList[index];
               return InkWell(
-                onTap: () {
-                  Get.to(
-                    const DetailUserView(),
-                    arguments: {'user': user},
-                  );
+                onTap: () async {
+                  var backData = await Get.to(DetailUserView(),
+                      arguments: {'user': user}, binding: DetailUserBinding());
+                  controller.updateData(backData);
                 },
-                child: ListTile(
-                    title: Text(
-                      user.name,
-                    ),
-                    subtitle: Text(user.lastName),
-                    trailing: InkWell(
-                      onTap: () => dailog(context, index),
-                      child: const Icon(Icons.delete),
-                    )),
+                child: Card(
+                  child: Column(
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Row(
+                          children: [
+                            Text('User : '),
+                            Text(user.name),
+                            const SizedBox(
+                              width: 10,
+                            ),
+                            Text(user.lastName),
+                            InkWell(
+                                onTap: () {
+                                  dailog(context, index);
+                                },
+                                child: const Icon(Icons.delete))
+                          ],
+                        ),
+                      ),
+                      ListView.builder(
+                        shrinkWrap: true,
+                        physics: const NeverScrollableScrollPhysics(),
+                        itemCount: user.phoneNumbers!.length,
+                        itemBuilder: (context, index) {
+                          return Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: Text(user.phoneNumbers![index]),
+                          );
+                        },
+                      )
+                    ],
+                  ),
+                ),
               );
             }))));
   }
@@ -89,50 +117,8 @@ class HompageView extends BaseView<HomepageScreenController> {
                         binding: DetailProvinceBinding());
                   },
                   child: ListTile(
-                      title: Text(controller.province.toList()[index])));
-            },
-          ),
-        ));
-  }
-
-//ข้อมูลผู้ใช้ที่ดูจากจังหวัด
-  Widget detailUserInProvinces(int index, List<User> user) {
-    return Scaffold(
-      appBar: AppBar(),
-      body: Center(
-        child: Column(
-          children: [
-            Row(
-              children: [Text(user[index].name), Text(user[index].lastName)],
-            )
-          ],
-        ),
-      ),
-    );
-  }
-
-//ลิสต์ผู็ใช้ในจังหวัด
-  Widget detailProvince(int index, List<User> userList) {
-    //
-    List<User> usersInProvince = userList
-        .where((user) => user.province == controller.province.toList()[index])
-        .toList();
-
-    return Obx(() => Scaffold(
-          appBar: AppBar(
-            title: Text(controller.province.toList()[index]),
-          ),
-          body: ListView.builder(
-            itemCount: usersInProvince.length,
-            itemBuilder: (context, index) {
-              return InkWell(
-                onTap: () =>
-                    Get.to(detailUserInProvinces(index, usersInProvince)),
-                child: ListTile(
-                  title: Text(usersInProvince[index].name),
-                  subtitle: Text(usersInProvince[index].lastName),
-                ),
-              );
+                      title: Text(
+                          "จังหวัด : ${controller.province.toList()[index]}")));
             },
           ),
         ));
@@ -166,9 +152,9 @@ class HompageView extends BaseView<HomepageScreenController> {
       onPressed: (() async {
         Map<String, dynamic> result =
             await Get.to(() => AddDataView(), binding: AddDataScreenBinding());
+        print('result $result');
         controller.addUser(result);
         // ignore: avoid_print
-        print('result $result');
       }),
       child: const Icon(Icons.add),
     );
