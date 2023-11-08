@@ -15,6 +15,14 @@ class HompageView extends BaseView<HomepageScreenController> {
     return Scaffold(
         appBar: AppBar(
           title: const Text('ข้อมูลลูกค้า'),
+          actions: [
+            ElevatedButton(
+        onPressed: () {
+          controller.deleteSelectedUsers();
+        },
+        child: const Icon(Icons.delete)
+      ),
+          ],
         ),
         body: DefaultTabController(
           length: 2,
@@ -51,8 +59,7 @@ class HompageView extends BaseView<HomepageScreenController> {
   }
 
   Widget first() {
-    controller.showData(controller.userList);
-
+    // controller.showData(controller.userList);
     return Scaffold(
         body: Obx(() => ListView.builder(
             itemCount: controller.userList.length,
@@ -67,24 +74,16 @@ class HompageView extends BaseView<HomepageScreenController> {
                 child: Card(
                   child: Column(
                     children: [
-                      Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: Row(
-                          children: [
-                            Text('User : '),
-                            Text(user.name),
-                            const SizedBox(
-                              width: 10,
-                            ),
-                            Text(user.lastName),
-                            InkWell(
-                                onTap: () {
-                                  dailog(context, index);
-                                },
-                                child: const Icon(Icons.delete))
-                          ],
-                        ),
-                      ),
+                      ListTile(
+              title: Text(user.name),
+              subtitle: Text(user.province),
+              trailing: Checkbox(
+                value: controller.selectedUsers.contains(user),
+                onChanged: (value) {
+                  controller.selectedUser(user);
+                },
+              ),
+            ),
                       ListView.builder(
                         shrinkWrap: true,
                         physics: const NeverScrollableScrollPhysics(),

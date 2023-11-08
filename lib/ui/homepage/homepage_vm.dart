@@ -26,7 +26,8 @@ class HomepageScreenController extends BaseController {
 
   //สร้าง set เก็บข้อมูล จังหวัดที่ไม่แสดงไม่ซ้ำกัน
   final RxSet<String> province = <String>{}.obs;
-
+  // สร้าง RxList เพื่อเก็บข้อมูล user ที่ถูกเลือกในการลบ
+  final RxList<User> selectedUsers = <User>[].obs;
 //เพิ่มข้อมูล Map ใส่ไว้ในลิสต์
   addUser(Map<String, dynamic> user) {
     userList.add(
@@ -45,6 +46,26 @@ class HomepageScreenController extends BaseController {
       return newUser;
     }).toList();
   }
+
+
+  // ฟังก์ชันเพิ่มหรือลบ user ที่ถูกเลือกในการลบ
+  void selectedUser(User user) {
+    if (selectedUsers.contains(user)) {
+      selectedUsers.remove(user);
+    } else {
+      selectedUsers.add(user);
+    }
+  }
+
+  // ฟังก์ชันสำหรับลบ user ที่ถูกเลือก
+  void deleteSelectedUsers() {
+    for (var user in selectedUsers.toList()) {
+      userList.remove(user);
+    }
+    // ล้างรายการ user ที่ถูกเลือกหลังจากการลบ
+    selectedUsers.clear();
+  }
+
 
 //สร้างปุ่มลบข้อมูล
 //โดยรับค่า index
