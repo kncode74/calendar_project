@@ -42,9 +42,9 @@ class HomepageScreenController extends BaseController {
   updateData(User newUser) {
     userList.value = userList.map((User userItem) {
       if (newUser.name == userItem.name) {
-        userItem = newUser;
+       userItem = newUser;
       }
-      return newUser;
+    return userItem;
     }).toList();
   }
 
