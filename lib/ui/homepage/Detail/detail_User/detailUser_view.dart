@@ -4,9 +4,7 @@ import 'package:getx_mvvm_boilerplate/application/base/base_view.dart';
 import 'package:getx_mvvm_boilerplate/models/user_model.dart';
 import 'package:getx_mvvm_boilerplate/ui/homepage/Detail/detail_User/detailUser_vm.dart';
 
-
 class DetailUserView extends BaseView<DetailUserViewModel> {
-  
   @override
   void onInit() {
     controller.init();
@@ -20,15 +18,23 @@ class DetailUserView extends BaseView<DetailUserViewModel> {
       () {
         return Scaffold(
           appBar: AppBar(
-            leading: BackButton(
-                onPressed: () {
-                  User? userList = controller.received.value;
-                  print('tttttt ${controller.received.value}');
-                  // Get.back(result: userList);
-                  Navigator.pop(context);
-                  
-                  
-                }, color: Colors.black),
+            // automaticallyImplyLeading: false,
+            leading: InkWell(
+              onTap: () {
+                User? userList = controller.received.value;
+                print('tttttt ${controller.received.value}');
+                Get.back(result: userList);
+              },
+              child: Icon(Icons.back_hand),
+            ),
+            // BackButton(
+            //     onPressed: () {
+            //       User? userList = controller.received.value;
+            //       print('tttttt ${controller.received.value}');
+            //       Get.back(result: userList);
+            //       // Navigator.pop(context);
+            //     },
+            //     color: Colors.black),
             title: Text(controller.received.value?.name ?? ''),
           ),
           body: Form(
@@ -38,6 +44,14 @@ class DetailUserView extends BaseView<DetailUserViewModel> {
                 padding: const EdgeInsets.all(8.0),
                 child: Column(
                   children: [
+                    InkWell(
+                      onTap: () {
+                        User? userList = controller.received.value;
+                        print('tttttt ${controller.received.value}');
+                        Get.back(result: userList);
+                      },
+                      child: Icon(Icons.arrow_back),
+                    ),
                     TextFormField(
                       controller: phoneController,
                       decoration: const InputDecoration(
