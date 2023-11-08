@@ -17,11 +17,10 @@ class HompageView extends BaseView<HomepageScreenController> {
           title: const Text('ข้อมูลลูกค้า'),
           actions: [
             ElevatedButton(
-        onPressed: () {
-          controller.deleteSelectedUsers();
-        },
-        child: const Icon(Icons.delete)
-      ),
+                onPressed: () {
+                  controller.deleteSelectedUsers();
+                },
+                child: const Icon(Icons.delete)),
           ],
         ),
         body: DefaultTabController(
@@ -75,15 +74,15 @@ class HompageView extends BaseView<HomepageScreenController> {
                   child: Column(
                     children: [
                       ListTile(
-              title: Text(user.name),
-              subtitle: Text(user.province),
-              trailing: Checkbox(
-                value: controller.selectedUsers.contains(user),
-                onChanged: (value) {
-                  controller.selectedUser(user);
-                },
-              ),
-            ),
+                        title: Text(user.name),
+                        subtitle: Text(user.province),
+                        trailing: Checkbox(
+                          value: controller.selectedUsersList.contains(user),
+                          onChanged: (value) {
+                            controller.selectedUser(user);
+                          },
+                        ),
+                      ),
                       ListView.builder(
                         shrinkWrap: true,
                         physics: const NeverScrollableScrollPhysics(),

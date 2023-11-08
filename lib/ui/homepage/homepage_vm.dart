@@ -20,14 +20,15 @@ class User {
 }
 
 class HomepageScreenController extends BaseController {
-  RxList<User> usersInProvince = <User>[].obs;
 // สร้างลิสต์ว่างของ MOdel User
   final RxList<User> userList = <User>[].obs;
 
   //สร้าง set เก็บข้อมูล จังหวัดที่ไม่แสดงไม่ซ้ำกัน
   final RxSet<String> province = <String>{}.obs;
+
   // สร้าง RxList เพื่อเก็บข้อมูล user ที่ถูกเลือกในการลบ
-  final RxList<User> selectedUsers = <User>[].obs;
+  final RxList<User> selectedUsersList = <User>[].obs;
+
 //เพิ่มข้อมูล Map ใส่ไว้ในลิสต์
   addUser(Map<String, dynamic> user) {
     userList.add(
@@ -47,25 +48,25 @@ class HomepageScreenController extends BaseController {
     }).toList();
   }
 
-
-  // ฟังก์ชันเพิ่มหรือลบ user ที่ถูกเลือกในการลบ
+  // เพิ่มหรือลบ user ที่ถูกเลือกในเพื่อลบ
   void selectedUser(User user) {
-    if (selectedUsers.contains(user)) {
-      selectedUsers.remove(user);
+    if (selectedUsersList.contains(user)) {
+      selectedUsersList.remove(user);
+      userList.refresh();
     } else {
-      selectedUsers.add(user);
+      selectedUsersList.add(user);
+      userList.refresh();
     }
   }
 
   // ฟังก์ชันสำหรับลบ user ที่ถูกเลือก
   void deleteSelectedUsers() {
-    for (var user in selectedUsers.toList()) {
+    for (var user in selectedUsersList.toList()) {
       userList.remove(user);
     }
     // ล้างรายการ user ที่ถูกเลือกหลังจากการลบ
-    selectedUsers.clear();
+    selectedUsersList.clear();
   }
-
 
 //สร้างปุ่มลบข้อมูล
 //โดยรับค่า index
