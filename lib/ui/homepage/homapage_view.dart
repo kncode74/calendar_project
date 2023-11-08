@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:getx_mvvm_boilerplate/application/base/base_view.dart';
+import 'package:getx_mvvm_boilerplate/models/user_model.dart';
 import 'package:getx_mvvm_boilerplate/ui/AddData/AddData_view.dart';
 import 'package:getx_mvvm_boilerplate/ui/AddData/AddData_vm.dart';
 import 'package:getx_mvvm_boilerplate/ui/homepage/Detail/detail_User/detailUser_view.dart';
@@ -66,8 +67,8 @@ class HompageView extends BaseView<HomepageScreenController> {
               User user = controller.userList[index];
               return InkWell(
                 onTap: () async {
-                  var backData = await Get.to(DetailUserView(),
-                      arguments: {'user': user}, binding: DetailUserBinding());
+                  var backData = await Get.to(DetailUserView(),binding: DetailUserBinding(),
+                      arguments: {'user': user});
                   controller.updateData(backData);
                 },
                 child: Card(

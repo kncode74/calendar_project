@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:getx_mvvm_boilerplate/application/base/base_view.dart';
+import 'package:getx_mvvm_boilerplate/models/user_model.dart';
 import 'package:getx_mvvm_boilerplate/ui/homepage/Detail/detail_province/detailProvince_vm.dart';
 import 'package:getx_mvvm_boilerplate/ui/homepage/Detail/inprovine.dart';
-import 'package:getx_mvvm_boilerplate/ui/homepage/homepage_vm.dart';
 
 class DetailprovinceView extends BaseView<DetailProvinceViewModel> {
   @override

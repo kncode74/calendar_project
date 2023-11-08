@@ -1,5 +1,6 @@
 import 'package:get/get.dart';
 import 'package:getx_mvvm_boilerplate/application/base/base_controller.dart';
+import 'package:getx_mvvm_boilerplate/models/user_model.dart';
 
 class HompageScreenBinding extends Bindings {
   @override
@@ -10,14 +11,7 @@ class HompageScreenBinding extends Bindings {
   }
 }
 
-class User {
-  final String name;
-  final String lastName;
-  final String province;
-  List<String>? phoneNumbers;
 
-  User(this.name, this.lastName, this.province, this.phoneNumbers);
-}
 
 class HomepageScreenController extends BaseController {
 // สร้างลิสต์ว่างของ MOdel User
@@ -40,13 +34,14 @@ class HomepageScreenController extends BaseController {
   }
 
   updateData(User newUser) {
-    userList.value = userList.map((User userItem) {
-      if (newUser.name == userItem.name) {
-       userItem = newUser;
-      }
-    return userItem;
-    }).toList();
-  }
+  userList.value = userList.map((User userItem) {
+    if (newUser.name == userItem.name) {
+      return newUser; // เฉพาะ item ที่อัพเดตเท่านั้น
+    }
+    return userItem; // คืนค่า item ที่ไม่ได้อัพเดต
+  }).toList();
+}
+
 
   // เพิ่มหรือลบ user ที่ถูกเลือกในเพื่อลบ
   void selectedUser(User user) {
@@ -59,12 +54,12 @@ class HomepageScreenController extends BaseController {
     }
   }
 
-  // ฟังก์ชันสำหรับลบ user ที่ถูกเลือก
+  // ลบ user ที่ถูกเลือก // วนลูปหา user ที่เพิ่มไปใน List selectedUsersList
   void deleteSelectedUsers() {
     for (var user in selectedUsersList.toList()) {
       userList.remove(user);
     }
-    // ล้างรายการ user ที่ถูกเลือกหลังจากการลบ
+    
     selectedUsersList.clear();
   }
 

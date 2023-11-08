@@ -1,6 +1,7 @@
 import 'package:get/get.dart';
 import 'package:getx_mvvm_boilerplate/application/base/base_controller.dart';
-import 'package:getx_mvvm_boilerplate/ui/homepage/homepage_vm.dart';
+import 'package:getx_mvvm_boilerplate/models/user_model.dart';
+
 
 class DetailProvinceBinding extends Bindings {
   @override

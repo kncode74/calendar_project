@@ -1,6 +1,7 @@
 import 'package:get/get.dart';
 import 'package:getx_mvvm_boilerplate/application/base/base_controller.dart';
-import 'package:getx_mvvm_boilerplate/ui/homepage/homepage_vm.dart';
+import 'package:getx_mvvm_boilerplate/models/user_model.dart';
+
 
 class RxNullable<T> {
   Rx<T> setNull() => (null as T).obs;
@@ -34,7 +35,7 @@ class DetailUserViewModel extends BaseController {
   }
 
   backData() {
-    Get.back(result: received.value);
+    Get.back();
   }
 
   deletePhonNumber(int index) {
