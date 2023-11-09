@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:getx_mvvm_boilerplate/application/base/base_view.dart';
 import 'package:getx_mvvm_boilerplate/ui/AddData/AddData_vm.dart';
@@ -61,6 +62,15 @@ class AddDataView extends BaseView<AddDataScreenVM> {
                     return null;
                   },
                 ),
+                InkWell(
+                  onTap: () {
+                    _showActionSheet(context);
+                  },
+                  child: const ListTile(
+                    title: Text('Upload '),
+                    leading: Icon(Icons.file_copy),
+                  ),
+                ),
                 ElevatedButton(
                     onPressed: () {
                       if (formKey.currentState!.validate()) {
@@ -76,6 +86,48 @@ class AddDataView extends BaseView<AddDataScreenVM> {
               ],
             ),
           )),
+    );
+  }
+
+  void _showActionSheet(BuildContext context) {
+    showCupertinoModalPopup<void>(
+      context: context,
+      builder: (BuildContext context) => CupertinoActionSheet(
+        actions: <CupertinoActionSheetAction>[
+          CupertinoActionSheetAction(
+              //isDefaultAction: true,
+              onPressed: () {
+                controller.captureImage();
+              },
+              child: const Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [Icon(Icons.camera), Text('  Take photo')],
+              )),
+          CupertinoActionSheetAction(
+              //isDefaultAction: true,
+              onPressed: () {
+                Navigator.pop(context);
+              },
+              child: const Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [Icon(Icons.photo), Text('  Upload Photos')],
+              )),
+          CupertinoActionSheetAction(
+              onPressed: () {
+                Navigator.pop(context);
+              },
+              child: const Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [Icon(Icons.file_copy), Text('  Upload File')],
+              )),
+        ],
+        cancelButton: CupertinoActionSheetAction(
+          child: Text("Cancel"),
+          onPressed: () {
+            Navigator.pop(context);
+          },
+        ),
+      ),
     );
   }
 }

@@ -27,7 +27,7 @@ class HomepageScreenController extends BaseController {
   addUser(Map<String, dynamic> user) {
     userList.add(
       User(user['name'], user['lastName'], user['province'],
-          [user['phone_number']]),
+          [user['phone_number']],user[''],user['']),
     );
     print('Added user: $userList');
     province.add(user['province']);
