@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:getx_mvvm_boilerplate/application/base/base_view.dart';
@@ -25,16 +27,9 @@ class DetailUserView extends BaseView<DetailUserViewModel> {
                 print('tttttt ${controller.received.value}');
                 Get.back(result: userList);
               },
-              child: Icon(Icons.back_hand),
+              child: const Icon(Icons.back_hand),
             ),
-            // BackButton(
-            //     onPressed: () {
-            //       User? userList = controller.received.value;
-            //       print('tttttt ${controller.received.value}');
-            //       Get.back(result: userList);
-            //       // Navigator.pop(context);
-            //     },
-            //     color: Colors.black),
+
             title: Text(controller.received.value?.name ?? ''),
           ),
           body: Form(
@@ -90,8 +85,12 @@ class DetailUserView extends BaseView<DetailUserViewModel> {
                     ),
                     Row(
                       children: [
-                        Text(
-                            'phoneNumber : ${controller.received.value?.phoneNumbers ?? ''}'),
+                        Expanded(
+                          child: Text(
+                            'phoneNumber : ${controller.received.value?.phoneNumbers ?? ''}',
+                            overflow: TextOverflow.clip,
+                          ),
+                        ),
                       ],
                     ),
                     Expanded(
@@ -111,7 +110,35 @@ class DetailUserView extends BaseView<DetailUserViewModel> {
                               child: const Icon(Icons.delete)),
                         );
                       },
-                    ))
+                    )),
+                    Expanded(
+                      child: ListView.builder(
+                        scrollDirection: Axis.horizontal,
+                        itemCount:
+                            controller.received.value?.documentFiles?.length ??
+                                0,
+                        itemBuilder: (context, index) {
+                          String? filePath =
+                              controller.received.value?.documentFiles?[index];
+                          String? lastnameFile = filePath?.split('.').last;
+                          String? nameFile = filePath?.split('/').last;
+
+                          if (lastnameFile != 'png' && lastnameFile != 'jpg') {
+                            return Container(
+                                margin: const EdgeInsets.only(left: 10),
+                                color: Colors.yellow,
+                                child: Column(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    Text(nameFile!),
+                                  ],
+                                ));
+                          } else {
+                            return Image.file(File(filePath!));
+                          }
+                        },
+                      ),
+                    )
                   ],
                 ),
               ),

@@ -16,11 +16,21 @@ class DetailUserBinding extends Bindings {
 }
 
 class DetailUserViewModel extends BaseController {
+  List<String> imageExtensions = [
+    'jpg',
+    'jpeg',
+    'png',
+    'gif',
+    'bmp',
+    'tiff',
+    'webp',
+    'avif',
+  ];
   final Rx<User?> received = RxNullable<User?>().setNull();
 
   init() {
     received.value = Get.arguments['user'] as User;
-    //print('reeeeeeee ${received.value?.phoneNumbers}');
+    print('object${received.value}');
   }
 
   addPhoneNumber(String phone) {

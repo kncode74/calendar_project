@@ -11,8 +11,6 @@ class HompageScreenBinding extends Bindings {
   }
 }
 
-
-
 class HomepageScreenController extends BaseController {
 // สร้างลิสต์ว่างของ MOdel User
   final RxList<User> userList = <User>[].obs;
@@ -27,24 +25,23 @@ class HomepageScreenController extends BaseController {
   addUser(Map<String, dynamic> user) {
     userList.add(
       User(user['name'], user['lastName'], user['province'],
-          [user['phone_number']],user[''],user['']),
+          [user['phone_number']], user['files']),
     );
     print('Added user: $userList');
     province.add(user['province']);
   }
 
   updateData(User newUser) {
-  userList.value = userList.map((User userItem) {
-    if (newUser.name == userItem.name) {
-      return newUser; // เฉพาะ item ที่อัพเดตเท่านั้น
-    }
-    return userItem; // คืนค่า item ที่ไม่ได้อัพเดต
-  }).toList();
-}
-
+    userList.value = userList.map((User userItem) {
+      if (newUser.name == userItem.name) {
+        return newUser; // เฉพาะ item ที่อัพเดตเท่านั้น
+      }
+      return userItem; // คืนค่า item ที่ไม่ได้อัพเดต
+    }).toList();
+  }
 
   // เพิ่มหรือลบ user ที่ถูกเลือกในเพื่อลบ
-  void selectedUser(User user) {
+  selectedUser(User user) {
     if (selectedUsersList.contains(user)) {
       selectedUsersList.remove(user);
       userList.refresh();
@@ -59,7 +56,6 @@ class HomepageScreenController extends BaseController {
     for (var user in selectedUsersList.toList()) {
       userList.remove(user);
     }
-    
     selectedUsersList.clear();
   }
 

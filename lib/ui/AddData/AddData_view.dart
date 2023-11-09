@@ -1,5 +1,8 @@
+import 'dart:io';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:getx_mvvm_boilerplate/application/base/base_view.dart';
 import 'package:getx_mvvm_boilerplate/ui/AddData/AddData_vm.dart';
 
@@ -14,6 +17,20 @@ class AddDataView extends BaseView<AddDataScreenVM> {
     return Scaffold(
       appBar: AppBar(
         title: const Text('ข้อมูลลูกค้า'),
+        actions: [
+          ElevatedButton(
+              onPressed: () {
+                if (formKey.currentState!.validate()) {
+                  controller.saveData(
+                    nameController.text,
+                    lastnameController.text,
+                    provinceController.text,
+                    phoneNumberController.text,
+                  );
+                }
+              },
+              child: const Text('Save'))
+        ],
       ),
       body: Form(
           key: formKey,
@@ -71,18 +88,15 @@ class AddDataView extends BaseView<AddDataScreenVM> {
                     leading: Icon(Icons.file_copy),
                   ),
                 ),
-                ElevatedButton(
-                    onPressed: () {
-                      if (formKey.currentState!.validate()) {
-                        controller.saveData(
-                          nameController.text,
-                          lastnameController.text,
-                          provinceController.text,
-                          phoneNumberController.text,
-                        );
-                      }
-                    },
-                    child: const Text('Save'))
+                Obx(() => Expanded(
+                        child: ListView.builder(
+                      scrollDirection: Axis.horizontal,
+                      itemCount: controller.filesList.length,
+                      itemBuilder: (context, index) {
+                        return Image.file(
+                            File(controller.filesList[index].path));
+                      },
+                    )))
               ],
             ),
           )),
@@ -97,7 +111,7 @@ class AddDataView extends BaseView<AddDataScreenVM> {
           CupertinoActionSheetAction(
               //isDefaultAction: true,
               onPressed: () {
-                controller.captureImage();
+                controller.pickcamaraImage();
               },
               child: const Row(
                 mainAxisAlignment: MainAxisAlignment.center,
@@ -106,7 +120,7 @@ class AddDataView extends BaseView<AddDataScreenVM> {
           CupertinoActionSheetAction(
               //isDefaultAction: true,
               onPressed: () {
-                Navigator.pop(context);
+                controller.pickGallaryImage();
               },
               child: const Row(
                 mainAxisAlignment: MainAxisAlignment.center,
@@ -114,7 +128,7 @@ class AddDataView extends BaseView<AddDataScreenVM> {
               )),
           CupertinoActionSheetAction(
               onPressed: () {
-                Navigator.pop(context);
+                controller.attachFile();
               },
               child: const Row(
                 mainAxisAlignment: MainAxisAlignment.center,
