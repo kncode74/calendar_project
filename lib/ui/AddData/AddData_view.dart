@@ -19,87 +19,98 @@ class AddDataView extends BaseView<AddDataScreenVM> {
         title: const Text('ข้อมูลลูกค้า'),
         actions: [
           ElevatedButton(
-              onPressed: () {
-                if (formKey.currentState!.validate()) {
-                  controller.saveData(
-                    nameController.text,
-                    lastnameController.text,
-                    provinceController.text,
-                    phoneNumberController.text,
-                  );
-                }
-              },
-              child: const Text('Save'))
+            onPressed: () {
+              if (formKey.currentState!.validate()) {
+                controller.saveData(
+                  nameController.text,
+                  lastnameController.text,
+                  provinceController.text,
+                  phoneNumberController.text,
+                );
+              }
+            },
+            child: const Text('Save'),
+          )
         ],
       ),
       body: Form(
-          key: formKey,
-          child: Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Column(
-              children: [
-                TextFormField(
-                  controller: nameController,
-                  decoration: const InputDecoration(labelText: 'Name'),
-                  validator: (value) {
-                    if (value == null || value.isEmpty) {
-                      return 'กรุณากรอกข้อมูล';
-                    }
-                    return null;
-                  },
+        key: formKey,
+        child: Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: Column(
+            children: [
+              _textFormField(nameController, 'Name', 'กรุณากรอกข้อมูล'),
+              _textFormField(lastnameController, 'LastName', 'กรุณากรอกข้อมูล'),
+              _textFormField(provinceController, 'Province', 'กรุณากรอกข้อมูล'),
+              _textFormField(phoneNumberController, 'phone', 'กรุณากรอกข้อมูล'),
+              InkWell(
+                onTap: () {
+                  _showActionSheet(context);
+                },
+                child: const ListTile(
+                  title: Text('Upload '),
+                  leading: Icon(Icons.file_copy),
                 ),
-                TextFormField(
-                  controller: lastnameController,
-                  decoration: const InputDecoration(labelText: 'lastName'),
-                  validator: (value) {
-                    if (value == null || value.isEmpty) {
-                      return 'กรุณากรอกข้อมูล';
-                    }
-                    return null;
-                  },
-                ),
-                TextFormField(
-                  controller: provinceController,
-                  decoration: const InputDecoration(labelText: 'province'),
-                  validator: (value) {
-                    if (value == null || value.isEmpty) {
-                      return 'กรุณากรอกข้อมูล';
-                    }
-                    return null;
-                  },
-                ),
-                TextFormField(
-                  controller: phoneNumberController,
-                  decoration: const InputDecoration(labelText: 'Tell '),
-                  keyboardType: TextInputType.number,
-                  validator: (value) {
-                    if (value == null || value.isEmpty) {
-                      return 'กรุณากรอกข้อมูล';
-                    }
-                    return null;
-                  },
-                ),
-                InkWell(
-                  onTap: () {
-                    _showActionSheet(context);
-                  },
-                  child: const ListTile(
-                    title: Text('Upload '),
-                    leading: Icon(Icons.file_copy),
+              ),
+              Obx(
+                () => Expanded(
+                  child: ListView.builder(
+                    scrollDirection: Axis.horizontal,
+                    itemCount: controller.filesList.length,
+                    itemBuilder: (context, index) {
+                      String files = controller.filesList[index].path;
+                      String lastnameFile = files.split('.').last;
+                      String nameFile = files.split('/').last;
+
+                      if (lastnameFile != 'png' && lastnameFile != 'jpg') {
+                        return Container(
+                          margin: const EdgeInsets.only(left: 10),
+                          color: Colors.white,
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Text(nameFile),
+                            ],
+                          ),
+                        );
+                      } else {
+                        return Image.file(File(files));
+                      }
+                    },
                   ),
                 ),
-                Obx(() => Expanded(
-                        child: ListView.builder(
-                      scrollDirection: Axis.horizontal,
-                      itemCount: controller.filesList.length,
-                      itemBuilder: (context, index) {
-                        return Image.file(
-                            File(controller.filesList[index].path));
-                      },
-                    )))
-              ],
-            ),
-          )),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget _textFormField(
+      TextEditingController controller, String label, String warning) {
+    return TextFormField(
+      controller: controller,
+      decoration: InputDecoration(labelText: label),
+      validator: (value) {
+        if (value == null || value.isEmpty) {
+          return warning;
+        }
+        return null;
+      },
+    );
+  }
+
+  CupertinoActionSheetAction cupertinoSheet(
+      IconData icon, String text, void Function() onPressed) {
+    return CupertinoActionSheetAction(
+      onPressed: () {
+        onPressed.call();
+      },
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [Icon(icon), Text(text)],
+      ),
     );
   }
 
@@ -108,35 +119,30 @@ class AddDataView extends BaseView<AddDataScreenVM> {
       context: context,
       builder: (BuildContext context) => CupertinoActionSheet(
         actions: <CupertinoActionSheetAction>[
-          CupertinoActionSheetAction(
-              //isDefaultAction: true,
-              onPressed: () {
-                controller.pickcamaraImage();
-              },
-              child: const Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [Icon(Icons.camera), Text('  Take photo')],
-              )),
-          CupertinoActionSheetAction(
-              //isDefaultAction: true,
-              onPressed: () {
-                controller.pickGallaryImage();
-              },
-              child: const Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [Icon(Icons.photo), Text('  Upload Photos')],
-              )),
-          CupertinoActionSheetAction(
-              onPressed: () {
-                controller.attachFile();
-              },
-              child: const Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [Icon(Icons.file_copy), Text('  Upload File')],
-              )),
+          cupertinoSheet(
+            Icons.camera,
+            '  Take photo',
+            () {
+              controller.pickcamaraImage();
+            },
+          ),
+          cupertinoSheet(
+            Icons.photo,
+            '  Upload Photos',
+            () {
+              controller.pickGallaryImage();
+            },
+          ),
+          cupertinoSheet(
+            Icons.file_copy,
+            '  Upload File',
+            () {
+              controller.attachFile();
+            },
+          )
         ],
         cancelButton: CupertinoActionSheetAction(
-          child: Text("Cancel"),
+          child: const Text("Cancel"),
           onPressed: () {
             Navigator.pop(context);
           },

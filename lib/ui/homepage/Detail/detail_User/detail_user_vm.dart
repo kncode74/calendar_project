@@ -16,21 +16,10 @@ class DetailUserBinding extends Bindings {
 }
 
 class DetailUserViewModel extends BaseController {
-  List<String> imageExtensions = [
-    'jpg',
-    'jpeg',
-    'png',
-    'gif',
-    'bmp',
-    'tiff',
-    'webp',
-    'avif',
-  ];
   final Rx<User?> received = RxNullable<User?>().setNull();
 
   init() {
     received.value = Get.arguments['user'] as User;
-    print('object${received.value}');
   }
 
   addPhoneNumber(String phone) {
@@ -40,13 +29,13 @@ class DetailUserViewModel extends BaseController {
     received.value?.phoneNumbers = phoneList;
     received.trigger(received.value);
 
-    print('dvfdddddddddddd$received');
+    print('addPhoneNumber$received');
   }
 
   deletePhonNumber(int index) {
-    received.value?.phoneNumbers!.removeAt(index);
+    received.value?.phoneNumbers?.removeAt(index);
     //Update data .trigger()
     received.trigger(received.value);
-    print('dddddddddddd ${received.value?.phoneNumbers}');
+    print('deletePhonNumbe ${received.value?.phoneNumbers}');
   }
 }

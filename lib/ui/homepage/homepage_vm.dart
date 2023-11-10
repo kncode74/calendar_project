@@ -5,13 +5,13 @@ import 'package:getx_mvvm_boilerplate/models/user_model.dart';
 class HompageScreenBinding extends Bindings {
   @override
   void dependencies() {
-    Get.lazyPut<HomepageScreenController>(
-      () => HomepageScreenController(),
+    Get.lazyPut<HomepageScreenVM>(
+      () => HomepageScreenVM(),
     );
   }
 }
 
-class HomepageScreenController extends BaseController {
+class HomepageScreenVM extends BaseController {
 // สร้างลิสต์ว่างของ MOdel User
   final RxList<User> userList = <User>[].obs;
 
@@ -27,7 +27,7 @@ class HomepageScreenController extends BaseController {
       User(user['name'], user['lastName'], user['province'],
           [user['phone_number']], user['files']),
     );
-    print('Added user: $userList');
+
     province.add(user['province']);
   }
 
@@ -52,16 +52,15 @@ class HomepageScreenController extends BaseController {
   }
 
   // ลบ user ที่ถูกเลือก // วนลูปหา user ที่เพิ่มไปใน List selectedUsersList
-  void deleteSelectedUsers() {
+  deleteSelectedUsers() {
     for (var user in selectedUsersList.toList()) {
       userList.remove(user);
     }
     selectedUsersList.clear();
   }
 
-//สร้างปุ่มลบข้อมูล
-//โดยรับค่า index
-//.removeAt
+//สร้างปุ่มลบข้อมูล//โดยรับค่า index//.removeAt
+
   delete(int index) {
     userList.removeAt(index);
   }

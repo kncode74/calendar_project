@@ -1,6 +1,6 @@
 import 'package:get/get.dart';
-import 'package:getx_mvvm_boilerplate/ui/homepage/Detail/detail_User/detailUser_view.dart';
-import 'package:getx_mvvm_boilerplate/ui/homepage/Detail/detail_User/detailUser_vm.dart';
+import 'package:getx_mvvm_boilerplate/ui/homepage/Detail/detail_User/detail_user_view.dart';
+import 'package:getx_mvvm_boilerplate/ui/homepage/Detail/detail_User/detail_user_vm.dart';
 import 'package:getx_mvvm_boilerplate/ui/homepage/homapage_view.dart';
 import 'package:getx_mvvm_boilerplate/ui/homepage/homepage_vm.dart';
 
@@ -17,7 +17,7 @@ class AppPages {
       page: () => HompageView(),
       binding: HompageScreenBinding(),
     ),
-     GetPage(
+    GetPage(
       name: _Paths.detailUser,
       page: () => DetailUserView(),
       binding: DetailUserBinding(),

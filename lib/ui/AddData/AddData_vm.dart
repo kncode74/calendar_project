@@ -21,7 +21,6 @@ class AddDataScreenVM extends BaseController {
     if (image != null) {
       filesList.add(XFile(image.path));
     }
-    print('dddddd $filesList');
   }
 
   pickGallaryImage() async {
@@ -29,7 +28,6 @@ class AddDataScreenVM extends BaseController {
     if (selectedImages.isNotEmpty) {
       filesList.addAll(selectedImages);
     }
-    print('wwwwwwwww $filesList');
   }
 
   attachFile() async {
@@ -38,21 +36,18 @@ class AddDataScreenVM extends BaseController {
     if (result != null) {
       filesList.addAll(result.paths.map((path) => XFile(path!)));
     }
-    print('wwwwwwwww $filesList');
   }
 
   saveData(String name, String lastname, String province, String phone) {
-    var rs = filesList.map((file) => file.path).toList();
+    var files = filesList.map((file) => file.path).toList();
     Map<String, dynamic> result = {
       'name': name,
       'lastName': lastname,
       'province': province,
       'phone_number': phone,
-      'files': rs
-      // 'files': filesList.map((file) => file.path).toList()
+      'files': files
     };
-    print('22222 $rs');
-    print('dddddddddddddddd $result');
+
     Get.back(result: result);
   }
 }
