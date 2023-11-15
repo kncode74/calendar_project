@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -12,6 +13,8 @@ class AddDataView extends BaseView<AddDataScreenVM> {
   TextEditingController lastnameController = TextEditingController();
   TextEditingController provinceController = TextEditingController();
   TextEditingController phoneNumberController = TextEditingController();
+  CollectionReference userCollection =
+      FirebaseFirestore.instance.collection('user');
   @override
   Widget render(BuildContext context) {
     return Scaffold(
@@ -31,7 +34,7 @@ class AddDataView extends BaseView<AddDataScreenVM> {
             },
             child: const Text('Save'),
           )
-        ],
+        ], 
       ),
       body: Form(
         key: formKey,

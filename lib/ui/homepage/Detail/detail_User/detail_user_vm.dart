@@ -1,9 +1,10 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:get/get.dart';
 import 'package:getx_mvvm_boilerplate/application/base/base_controller.dart';
 import 'package:getx_mvvm_boilerplate/models/user_model.dart';
 
 class RxNullable<T> {
-  Rx<T> setNull() => (null as T).obs;
+  Rx<T?> setNull() => Rx<T?>(null);
 }
 
 class DetailUserBinding extends Bindings {
@@ -16,26 +17,86 @@ class DetailUserBinding extends Bindings {
 }
 
 class DetailUserViewModel extends BaseController {
-  final Rx<User?> received = RxNullable<User?>().setNull();
+  Rx<User?> userDetails = RxNullable<User>().setNull();
 
-  init() {
-    received.value = Get.arguments['user'] as User;
+  String received = Get.arguments['user'];
+
+  getUserDetails(String userId) async {
+    try {
+      DocumentSnapshot<Map<String, dynamic>> userGet =
+          await FirebaseFirestore.instance.collection('user').doc(userId).get();
+
+      if (userGet.exists) {
+        List<String> phoneNumbers = (userGet['phone_number'] as List<dynamic>)
+            .map((dynamic number) => number.toString())
+            .toList();
+        List<String> fileList = (userGet['files'] as List<dynamic>)
+            .map((dynamic number) => number.toString())
+            .toList();
+
+        userDetails.value = User(
+          userGet['name'],
+          userGet['lastName'],
+          userGet['province'],
+          phoneNumbers,
+          fileList,
+          userId,
+        );
+        // print('ffffff $userDetails');
+      }
+    } catch (e) {
+      print('${e.toString()}');
+    }
+    return userDetails;
   }
 
-  addPhoneNumber(String phone) {
-    String newPhoneNumber = phone;
-    List<String> phoneList = received.value?.phoneNumbers ?? [];
-    phoneList.add(newPhoneNumber);
-    received.value?.phoneNumbers = phoneList;
-    received.trigger(received.value);
+  Future<void> addPhone(String number, String userId) async {
+    List<String> phoneNum = userDetails.value?.phoneNumbers ?? [];
+    phoneNum.add(number);
+    try {
+      DocumentReference userDocRef =
+          FirebaseFirestore.instance.collection('user').doc(userId);
 
-    print('addPhoneNumber$received');
+      await userDocRef.update(
+        {
+          'phone_number': phoneNum,
+        },
+      );
+    } catch (e) {
+      print('Error adding phone number: $e');
+    }
   }
 
-  deletePhonNumber(int index) {
-    received.value?.phoneNumbers?.removeAt(index);
-    //Update data .trigger()
-    received.trigger(received.value);
-    print('deletePhonNumbe ${received.value?.phoneNumbers}');
+  Future<void> deletePhoneByIndex(int index, String userId) async {
+    List<String> phoneNum = userDetails.value?.phoneNumbers ?? [];
+    phoneNum.removeAt(index);
+    try {
+      DocumentReference userDocRef =
+          FirebaseFirestore.instance.collection('user').doc(userId);
+      await userDocRef.update(
+        {
+          'phone_number': phoneNum,
+        },
+      );
+    } catch (e) {
+      print('Error deleting phone number: $e');
+    }
   }
+
+  // addPhoneNumber(String phone) {
+  //   String newPhoneNumber = phone;
+  //   List<String> phoneList = received.value?.phoneNumbers ?? [];
+  //   phoneList.add(newPhoneNumber);
+  //   received.value?.phoneNumbers = phoneList;
+  //   received.trigger(received.value);
+
+  //   print('addPhoneNumber$received');
+  // }
+
+  // delete(int index) {
+  //   received.value?.phoneNumbers?.removeAt(index);
+  //   //Update data .trigger()
+  //   received.trigger(received.value);
+  //   print('deletePhonNumbe ${received.value?.phoneNumbers}');
+  // }
 }

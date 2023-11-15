@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:get/get.dart';
 import 'package:getx_mvvm_boilerplate/application/base/base_controller.dart';
 import 'package:getx_mvvm_boilerplate/models/user_model.dart';
@@ -12,23 +13,35 @@ class HompageScreenBinding extends Bindings {
 }
 
 class HomepageScreenVM extends BaseController {
-// สร้างลิสต์ว่างของ MOdel User
+  CollectionReference userCollection =
+      FirebaseFirestore.instance.collection("user");
+
   final RxList<User> userList = <User>[].obs;
 
-  //สร้าง set เก็บข้อมูล จังหวัดที่ไม่แสดงไม่ซ้ำกัน
   final RxSet<String> province = <String>{}.obs;
 
-  // สร้าง RxList เพื่อเก็บข้อมูล user ที่ถูกเลือกในการลบ
-  final RxList<User> selectedUsersList = <User>[].obs;
+  final RxList selectedUsersList = [].obs;
+  
+  var isLoading = false;
 
-//เพิ่มข้อมูล Map ใส่ไว้ในลิสต์
-  addUser(Map<String, dynamic> user) {
-    userList.add(
-      User(user['name'], user['lastName'], user['province'],
-          [user['phone_number']], user['files']),
-    );
+  selectedDelete(User user) {
+    if (selectedUsersList.contains(user)) {
+      selectedUsersList.remove(user);
+    } else {
+      selectedUsersList.add(user);
+    }
+    userList.refresh();
+  }
 
-    province.add(user['province']);
+  deleteDataFromFirebase() {
+    for (var user in selectedUsersList.toList()) {
+      userCollection.doc(user.id).delete().then((_) {}).catchError((error) {});
+    }
+    selectedUsersList.clear();
+  }
+
+  delete(int index) {
+    userList.removeAt(index);
   }
 
   updateData(User newUser) {
@@ -40,36 +53,46 @@ class HomepageScreenVM extends BaseController {
     }).toList();
   }
 
-  // เพิ่มหรือลบ user ที่ถูกเลือกในเพื่อลบ
-  selectedUser(User user) {
-    if (selectedUsersList.contains(user)) {
-      selectedUsersList.remove(user);
-      userList.refresh();
-    } else {
-      selectedUsersList.add(user);
-      userList.refresh();
+  getData() async {
+    try {
+      QuerySnapshot userGet =
+          await FirebaseFirestore.instance.collection('user').get();
+      userList.clear();
+      for (var user in userGet.docs) {
+        List<String> phoneNumbers = (user['phone_number'] as List<dynamic>)
+            .map((dynamic number) => number.toString())
+            .toList();
+        List<String> fileList = (user['files'] as List<dynamic>)
+            .map((dynamic number) => number.toString())
+            .toList();
+        userList.add(
+          User(
+            user['name'],
+            user['lastName'],
+            user['province'],
+            phoneNumbers,
+            fileList,
+            user.id,
+          ),
+        );
+        province.add(user['province']);
+      }
+    } catch (e) {
+      print('${e.toString()}');
     }
   }
+  // deleteSelectedUsers() {
+  //   for (var user in selectedUsersList.toList()) {
+  //     userList.remove(user);
+  //   }
+  //   selectedUsersList.clear();
+  // }
 
-  // ลบ user ที่ถูกเลือก // วนลูปหา user ที่เพิ่มไปใน List selectedUsersList
-  deleteSelectedUsers() {
-    for (var user in selectedUsersList.toList()) {
-      userList.remove(user);
-    }
-    selectedUsersList.clear();
-  }
-
-//สร้างปุ่มลบข้อมูล//โดยรับค่า index//.removeAt
-
-  delete(int index) {
-    userList.removeAt(index);
-  }
-
-  // แสดงข้อมูลใน masterList
-  showData(List<User> userList) {
-    for (var user in userList) {
-      print(
-          'Name: ${user.name}, Lastname: ${user.lastName},province: ${user.province}, Tel: ${user.phoneNumbers}');
-    }
-  }
+  // // แสดงข้อมูลใน masterList
+  // showData(List<User> userList) {
+  //   for (var user in userList) {
+  //     print(
+  //         'Name: ${user.name}, Lastname: ${user.lastName},province: ${user.province}, Tel: ${user.phoneNumbers}');
+  //   }
+  // }
 }

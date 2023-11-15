@@ -1,4 +1,6 @@
 import 'package:get/get.dart';
+import 'package:getx_mvvm_boilerplate/ui/AddData/firebase.dart';
+import 'package:getx_mvvm_boilerplate/ui/AddData/firebase_vm.dart';
 import 'package:getx_mvvm_boilerplate/ui/homepage/Detail/detail_User/detail_user_view.dart';
 import 'package:getx_mvvm_boilerplate/ui/homepage/Detail/detail_User/detail_user_vm.dart';
 import 'package:getx_mvvm_boilerplate/ui/homepage/homapage_view.dart';
@@ -15,12 +17,12 @@ class AppPages {
     GetPage(
       name: _Paths.splashScreen,
       page: () => HompageView(),
-      binding: HompageScreenBinding(),
+      binding: HompageScreenBinding()
     ),
-    GetPage(
-      name: _Paths.detailUser,
-      page: () => DetailUserView(),
-      binding: DetailUserBinding(),
-    ),
+    // GetPage(
+    //   name: _Paths.detailUser,
+    //   page: () => DetailUserView(),
+    //   binding: DetailUserBinding(),
+    // ),
   ];
 }

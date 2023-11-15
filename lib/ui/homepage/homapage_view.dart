@@ -12,16 +12,23 @@ import 'package:getx_mvvm_boilerplate/ui/homepage/homepage_vm.dart';
 
 class HompageView extends BaseView<HomepageScreenVM> {
   @override
+  void onInit() {
+    controller.getData();
+  }
+
+  @override
   Widget render(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
           title: const Text('ข้อมูลลูกค้า'),
           actions: [
             ElevatedButton(
-                onPressed: () {
-                  controller.deleteSelectedUsers();
-                },
-                child: const Icon(Icons.delete)),
+              onPressed: () async {
+                await controller.deleteDataFromFirebase();
+                controller.getData();
+              },
+              child: const Icon(Icons.delete),
+            ),
           ],
         ),
         body: DefaultTabController(
@@ -60,51 +67,62 @@ class HompageView extends BaseView<HomepageScreenVM> {
   }
 
   Widget _firstTab() {
-    // controller.showData(controller.userList);
-    return Scaffold(
-      body: Obx(
-        () => ListView.builder(
-          itemCount: controller.userList.length,
-          itemBuilder: ((context, index) {
-            User user = controller.userList[index];
-            return InkWell(
-              onTap: () async {
-                var backData = await Get.to(DetailUserView(),
-                    binding: DetailUserBinding(), arguments: {'user': user});
-                controller.updateData(backData);
-              },
-              child: Card(
-                child: Column(
-                  children: [
-                    ListTile(
-                      title: Text(user.name),
-                      subtitle: Text(user.province),
-                      trailing: Checkbox(
-                        value: controller.selectedUsersList.contains(user),
-                        onChanged: (value) {
-                          controller.selectedUser(user);
-                        },
-                      ),
+    return Scaffold(body: Obx(() {
+      return Center(
+        child: controller.isLoading
+            ? const CircularProgressIndicator()
+            : ListView.builder(
+                itemCount: controller.userList.length,
+                itemBuilder: (BuildContext context, index) {
+                  final user = controller.userList[index];
+                  print('kkkkkk :$user');
+                  return Card(
+                    child: Column(
+                      children: [
+                        ListTile(
+                          onTap: () {
+                            Get.to(
+                              DetailUserView(),
+                              binding: DetailUserBinding(),
+                              arguments: {'user': user.id},
+                            )?.then((_) {
+                              controller.getData();
+                            });
+                          },
+                          title: Row(
+                            children: [
+                              Text(user.name),
+                              Text(user.lastName),
+                            ],
+                          ),
+                          subtitle: Text(user.province),
+                          trailing: Checkbox(
+                            value: controller.selectedUsersList.contains(user),
+                            onChanged: (value) {
+                              controller.selectedDelete(user);
+                              print(
+                                  'object ${controller.selectedUsersList.contains(user)}');
+                            },
+                          ),
+                        ),
+                        ListView.builder(
+                          shrinkWrap: true,
+                          physics: const NeverScrollableScrollPhysics(),
+                          itemCount: user.phoneNumbers!.length,
+                          itemBuilder: (context, index) {
+                            return Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: Text(user.phoneNumbers![index]),
+                            );
+                          },
+                        )
+                      ],
                     ),
-                    ListView.builder(
-                      shrinkWrap: true,
-                      physics: const NeverScrollableScrollPhysics(),
-                      itemCount: user.phoneNumbers!.length,
-                      itemBuilder: (context, index) {
-                        return Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: Text(user.phoneNumbers![index]),
-                        );
-                      },
-                    )
-                  ],
-                ),
+                  );
+                },
               ),
-            );
-          }),
-        ),
-      ),
-    );
+      );
+    }));
   }
 
   Widget _secoundTab() {
@@ -153,11 +171,8 @@ class HompageView extends BaseView<HomepageScreenVM> {
   Widget _floatingButton() {
     return FloatingActionButton(
       onPressed: (() async {
-        Map<String, dynamic> result =
-            await Get.to(() => AddDataView(), binding: AddDataScreenBinding());
-        print('result $result');
-        controller.addUser(result);
-        // ignore: avoid_print
+        await Get.to(() => AddDataView(), binding: AddDataScreenBinding());
+        controller.getData();
       }),
       child: const Icon(Icons.add),
     );

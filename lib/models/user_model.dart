@@ -5,7 +5,8 @@ class User {
   List<String>? phoneNumbers;
 
   List<String>? documentFiles;
+  String id ;
 
   User(this.name, this.lastName, this.province, this.phoneNumbers,
-      this.documentFiles);
+      this.documentFiles,this.id);
 }
