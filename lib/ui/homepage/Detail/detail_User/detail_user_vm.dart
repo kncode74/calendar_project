@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:get/get.dart';
 import 'package:getx_mvvm_boilerplate/application/base/base_controller.dart';
+import 'package:getx_mvvm_boilerplate/data/repositories/api_repository.dart';
 import 'package:getx_mvvm_boilerplate/models/user_model.dart';
 
 class RxNullable<T> {
@@ -20,34 +21,14 @@ class DetailUserViewModel extends BaseController {
   Rx<User?> userDetails = RxNullable<User>().setNull();
 
   String received = Get.arguments['user'];
+  ApiRepository repository = ApiRepository();
+  init() {
+    loadDetailUser();
+  }
 
-  getUserDetails(String userId) async {
-    try {
-      DocumentSnapshot<Map<String, dynamic>> userGet =
-          await FirebaseFirestore.instance.collection('user').doc(userId).get();
-
-      if (userGet.exists) {
-        List<String> phoneNumbers = (userGet['phone_number'] as List<dynamic>)
-            .map((dynamic number) => number.toString())
-            .toList();
-        List<String> fileList = (userGet['files'] as List<dynamic>)
-            .map((dynamic number) => number.toString())
-            .toList();
-
-        userDetails.value = User(
-          userGet['name'],
-          userGet['lastName'],
-          userGet['province'],
-          phoneNumbers,
-          fileList,
-          userId,
-        );
-        // print('ffffff $userDetails');
-      }
-    } catch (e) {
-      print('${e.toString()}');
-    }
-    return userDetails;
+  loadDetailUser() async {
+    userDetails.value = await repository.getDetailUser(received);
+    print(userDetails.value);
   }
 
   Future<void> addPhone(String number, String userId) async {

@@ -12,8 +12,8 @@ import 'package:getx_mvvm_boilerplate/ui/homepage/homepage_vm.dart';
 
 class HompageView extends BaseView<HomepageScreenVM> {
   @override
-  void onInit() {
-    controller.getData();
+  void onInit() async {
+    controller.init();
   }
 
   @override
@@ -25,7 +25,7 @@ class HompageView extends BaseView<HomepageScreenVM> {
             ElevatedButton(
               onPressed: () async {
                 await controller.deleteDataFromFirebase();
-                controller.getData();
+                controller.loadDataForeFirebase();
               },
               child: const Icon(Icons.delete),
             ),
@@ -86,7 +86,7 @@ class HompageView extends BaseView<HomepageScreenVM> {
                               binding: DetailUserBinding(),
                               arguments: {'user': user.id},
                             )?.then((_) {
-                              controller.getData();
+                              controller.loadDataForeFirebase();
                             });
                           },
                           title: Row(
@@ -172,7 +172,7 @@ class HompageView extends BaseView<HomepageScreenVM> {
     return FloatingActionButton(
       onPressed: (() async {
         await Get.to(() => AddDataView(), binding: AddDataScreenBinding());
-        controller.getData();
+        controller.loadDataForeFirebase();
       }),
       child: const Icon(Icons.add),
     );

@@ -10,7 +10,7 @@ import 'package:getx_mvvm_boilerplate/ui/homepage/Detail/detail_User/detail_user
 class DetailUserView extends BaseView<DetailUserViewModel> {
   @override
   void onInit() {
-    controller.getUserDetails(controller.received);
+    controller.init();
   }
 
   TextEditingController phoneController = TextEditingController();
@@ -29,7 +29,7 @@ class DetailUserView extends BaseView<DetailUserViewModel> {
                   await Get.to(EditDataView(),
                       binding: EditDataBinding(),
                       arguments: {'user': detailUser})?.then((_) {
-                    controller.getUserDetails(controller.received);
+                    controller.loadDetailUser();
                   });
                   ;
                 },
@@ -61,7 +61,7 @@ class DetailUserView extends BaseView<DetailUserViewModel> {
                       if (formKey.currentState!.validate()) {
                         await controller.addPhone(
                             phoneController.text, detailUser!.id);
-                        controller.getUserDetails(controller.received);
+                        controller.loadDetailUser();
                       }
                       phoneController.clear();
                     },
@@ -97,7 +97,7 @@ class DetailUserView extends BaseView<DetailUserViewModel> {
               InkWell(
                   onTap: () {
                     controller.deletePhoneByIndex(index, user!.id).then((_) {
-                      controller.getUserDetails(controller.received);
+                      controller.loadDetailUser();
                     });
                   },
                   child: const Icon(Icons.delete)),

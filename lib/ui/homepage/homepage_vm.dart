@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:get/get.dart';
 import 'package:getx_mvvm_boilerplate/application/base/base_controller.dart';
+import 'package:getx_mvvm_boilerplate/data/repositories/api_repository.dart';
 import 'package:getx_mvvm_boilerplate/models/user_model.dart';
 
 class HompageScreenBinding extends Bindings {
@@ -15,15 +16,19 @@ class HompageScreenBinding extends Bindings {
 class HomepageScreenVM extends BaseController {
   CollectionReference userCollection =
       FirebaseFirestore.instance.collection("user");
-
   final RxList<User> userList = <User>[].obs;
-
   final RxSet<String> province = <String>{}.obs;
-
   final RxList selectedUsersList = [].obs;
-  
   var isLoading = false;
+  ApiRepository respone = ApiRepository();
+  init() {
+    loadDataForeFirebase();
+  }
 
+  loadDataForeFirebase() async {
+    userList.value = await respone.getUser();
+  }
+  
   selectedDelete(User user) {
     if (selectedUsersList.contains(user)) {
       selectedUsersList.remove(user);
@@ -53,34 +58,6 @@ class HomepageScreenVM extends BaseController {
     }).toList();
   }
 
-  getData() async {
-    try {
-      QuerySnapshot userGet =
-          await FirebaseFirestore.instance.collection('user').get();
-      userList.clear();
-      for (var user in userGet.docs) {
-        List<String> phoneNumbers = (user['phone_number'] as List<dynamic>)
-            .map((dynamic number) => number.toString())
-            .toList();
-        List<String> fileList = (user['files'] as List<dynamic>)
-            .map((dynamic number) => number.toString())
-            .toList();
-        userList.add(
-          User(
-            user['name'],
-            user['lastName'],
-            user['province'],
-            phoneNumbers,
-            fileList,
-            user.id,
-          ),
-        );
-        province.add(user['province']);
-      }
-    } catch (e) {
-      print('${e.toString()}');
-    }
-  }
   // deleteSelectedUsers() {
   //   for (var user in selectedUsersList.toList()) {
   //     userList.remove(user);
