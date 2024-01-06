@@ -12,11 +12,10 @@ class SplashScreenBinding extends Bindings {
 }
 
 class SplashScreenController extends BaseController {
-  //
-  final Rx<String>  str= 'hell'.obs;
+  @override
+  void onInit() {
+    // TODO: implement onInit
 
-  void setString(String name){
-    str.value += ' unikwan';
-  print(str.value);
+    print('test');
   }
 }
