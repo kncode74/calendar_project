@@ -1,4 +1,6 @@
 import 'package:get/get.dart';
+import 'package:getx_mvvm_boilerplate/ui/calendar/calendar.view.dart';
+import 'package:getx_mvvm_boilerplate/ui/calendar/calendar.vm.dart';
 import 'package:getx_mvvm_boilerplate/ui/splash_screen/splash_screen.view.dart';
 import 'package:getx_mvvm_boilerplate/ui/splash_screen/splash_screen.vm.dart';
 
@@ -14,5 +16,9 @@ class AppPages {
         name: _Paths.splashScreen,
         page: () => SplashScreenView(),
         binding: SplashScreenBinding()),
+    GetPage(
+        name: _Paths.calendar,
+        page: () => CalendarView(),
+        binding: CalendarBinding()),
   ];
 }
