@@ -1,4 +1,4 @@
-# getx_mvvm_CALENDAR
+# getx_mvvm_calendar
 
 
 ## Getting Started
