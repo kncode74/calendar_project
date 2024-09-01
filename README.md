@@ -1,6 +1,5 @@
-# getx_mvvm_boilerplate
+# getx_mvvm_calendar
 
-GetX MVVM boilerplate
 
 ## Getting Started
 
