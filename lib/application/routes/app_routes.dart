@@ -5,11 +5,13 @@ abstract class Routes {
   Routes._();
 
   static const splashScreen = _Paths.splashScreen;
-
+  static const calendar = _Paths.calendar;
   static const detailUser = _Paths.detailUser;
+
 }
 
 abstract class _Paths {
   static const splashScreen = '/splashScreen';
   static const detailUser = '/userDetail';
+  static const calendar = '/calendar';
 }

@@ -46,6 +46,7 @@ dependencies:
   cloud_firestore: ^4.13.0
   firebase_core: ^2.22.0
   firebase_storage: ^11.5.0
+  syncfusion_flutter_calendar: ^26.2.11+1
 
 dev_dependencies:
   flutter_test:
