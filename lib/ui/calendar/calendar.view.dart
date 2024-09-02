@@ -1,15 +1,23 @@
 import 'package:flutter/material.dart';
 import 'package:getx_mvvm_boilerplate/application/base/base_view.dart';
+import 'package:getx_mvvm_boilerplate/ui/_theme/app_theme.dart';
 import 'package:getx_mvvm_boilerplate/ui/calendar/calendar.vm.dart';
 import 'package:syncfusion_flutter_calendar/calendar.dart';
 
 class CalendarAppView extends BaseView<CalendarVM> {
   @override
+  void onInit() {
+    controller.init();
+    super.onInit();
+  }
+
+  @override
   Widget render(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Calendar'),
-      ),
+          title: const Text('Calendar'),
+          centerTitle: true,
+          backgroundColor: ThemeData().primary()),
       body: Column(
         children: [
           Expanded(
@@ -22,17 +30,16 @@ class CalendarAppView extends BaseView<CalendarVM> {
               viewHeaderHeight: 40,
               view: CalendarView.month,
               headerStyle: CalendarHeaderStyle(
-                  // backgroundColor: ThemeData().background(),
-                  ),
+                backgroundColor: Colors.white70,
+              ),
               viewHeaderStyle: ViewHeaderStyle(
-                  // backgroundColor: ThemeData().primary().withOpacity(0.3),
-                  // dayTextStyle: context?.textSmallBold.copyWith(
-                  //   color: ThemeData().primary(),
-                  // ),
-                  ),
+                backgroundColor: ThemeData().primary().withOpacity(0.3),
+                dayTextStyle: TextStyle(color: ThemeData().primary()),
+              ),
               monthViewSettings: MonthViewSettings(
                 monthCellStyle: MonthCellStyle(
-                  leadingDatesBackgroundColor: Colors.red,
+                  leadingDatesBackgroundColor:
+                      ThemeData().primary().withOpacity(0.3),
                   trailingDatesBackgroundColor: Colors.blue,
                 ),
                 appointmentDisplayCount: 3,
