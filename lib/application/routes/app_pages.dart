@@ -9,7 +9,7 @@ part 'app_routes.dart';
 class AppPages {
   AppPages._();
 
-  static const initial = Routes.splashScreen;
+  static const initial = Routes.calendar;
 
   static final routes = [
     GetPage(
@@ -18,7 +18,7 @@ class AppPages {
         binding: SplashScreenBinding()),
     GetPage(
         name: _Paths.calendar,
-        page: () => CalendarView(),
+        page: () => CalendarAppView(),
         binding: CalendarBinding()),
   ];
 }

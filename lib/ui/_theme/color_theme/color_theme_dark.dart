@@ -3,7 +3,7 @@ import 'package:getx_mvvm_boilerplate/ui/_theme/color_theme/color_theme.dart';
 
 class ColorThemeDark extends ColorTheme {
   @override
-  Color get primaryColor => const Color(0xFF5DBB66);
+  Color get primaryColor => const Color(0xFFD1B2FF);
 
   @override
   Color get secondaryColor => const Color(0xFF508855);
